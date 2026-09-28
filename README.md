@@ -1,4 +1,4 @@
-# KSK PRO - Tra Cứu ICD-10 & Xếp Loại Sức Khỏe PWA
+# KSK - Tra Cứu ICD-10 & Xếp Loại Sức Khỏe PWA
 
 [![Vite](https://img.shields.io/badge/Vite-6.x-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
 [![React](https://img.shields.io/badge/React-19.x-61DAFB?logo=react&logoColor=black)](https://react.dev/)

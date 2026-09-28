@@ -12,8 +12,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'robots.txt'],
       manifest: {
-        name: 'KSK Pro - Tra cứu ICD-10 & Xếp loại Sức khỏe',
-        short_name: 'KSK Pro',
+        name: 'KSK - Tra cứu ICD-10 & Xếp loại Sức khỏe',
+        short_name: 'KSK',
         description: 'Ứng dụng PWA tra cứu mã ICD-10, phân loại sức khỏe theo VBHN 88/VBHN-BQP (18/11/2025) và TT 32/2023/TT-BYT',
         theme_color: '#0284c7',
         background_color: '#0f172a',

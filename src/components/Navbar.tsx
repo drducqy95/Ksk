@@ -40,7 +40,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             <div>
               <div className="flex items-center space-x-2">
                 <span className="font-extrabold text-lg sm:text-xl tracking-tight bg-gradient-to-r from-sky-400 via-teal-300 to-emerald-400 bg-clip-text text-transparent">
-                  KSK PRO
+                  KSK
                 </span>
                 <span className="px-1.5 py-0.5 text-[10px] uppercase font-bold tracking-wider bg-sky-500/20 text-sky-300 border border-sky-500/30 rounded">
                   PWA

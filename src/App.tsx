@@ -33,7 +33,7 @@ export function App() {
     installPrompt.prompt()
     installPrompt.userChoice.then((choiceResult: any) => {
       if (choiceResult.outcome === 'accepted') {
-        setToastMessage('Ứng dụng KSK PRO đã được cài đặt thành công!')
+        setToastMessage('Ứng dụng KSK đã được cài đặt thành công!')
       }
       setInstallPrompt(null)
     })
@@ -117,7 +117,7 @@ export function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="space-y-1 text-center sm:text-left">
             <div className="font-bold text-slate-700 flex items-center justify-center sm:justify-start space-x-1.5">
-              <span>Hệ Thống KSK PRO - Tra cứu ICD-10 & Xếp loại Sức khỏe PWA</span>
+              <span>Hệ Thống KSK - Tra cứu ICD-10 & Xếp loại Sức khỏe PWA</span>
             </div>
             <p>
               Căn cứ: <strong>Văn bản hợp nhất 88/VBHN-BQP</strong> (18/11/2025 - Hợp nhất TT 105 & TT 106) & <strong>Thông tư 32/2023/TT-BYT</strong>.

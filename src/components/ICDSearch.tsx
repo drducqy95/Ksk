@@ -4,7 +4,7 @@ import { getFullICD10 } from '../utils/icdLoader'
 import { searchICD10 } from '../utils/searchHelper'
 import { Pagination } from './Pagination'
 import type { ICD10Item, DepartmentKey } from '../types'
-import { Search, PlusCircle, Check, AlertTriangle, ShieldCheck, HeartPulse, Sparkles, BookOpen, ChevronDown, ChevronUp, LayoutGrid, List, Database, Loader2 } from 'lucide-react'
+import { Search, PlusCircle, Check, AlertTriangle, ShieldCheck, HeartPulse, BookOpen, ChevronDown, ChevronUp, LayoutGrid, List, Loader2 } from 'lucide-react'
 
 interface ICDSearchProps {
   onSelectForAssessment?: (item: ICD10Item) => void
@@ -98,29 +98,6 @@ export const ICDSearch: React.FC<ICDSearchProps> = ({
 
   return (
     <div className="space-y-4 sm:space-y-6">
-      {/* Hero Banner */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-sky-900 via-slate-900 to-emerald-950 p-5 sm:p-7 text-white shadow-xl border border-sky-800/40">
-        <div className="relative z-10 max-w-3xl">
-          <div className="flex flex-wrap items-center gap-2 mb-2">
-            <span className="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full bg-sky-500/20 text-sky-300 text-[11px] font-semibold border border-sky-500/30">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Căn cứ VBHN 88/VBHN-BQP (18/11/2025) & Thông tư 32/2023/TT-BYT</span>
-            </span>
-            <span className="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[11px] font-bold border border-emerald-500/30">
-              <Database className="w-3.5 h-3.5" />
-              <span>Toàn bộ {allData.length.toLocaleString('vi-VN')} mã bệnh Bộ Y Tế</span>
-            </span>
-          </div>
-
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight mb-1.5">
-            Từ Điển ICD-10 Toàn Diện & Phân Loại Sức Khỏe
-          </h1>
-          <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-            Tra cứu tốc độ cao toàn bộ 13,190 mã bệnh tật quốc tế ICD-10, tự động đối chiếu điểm số Quân sự (Điểm 1 - 6) và xếp loại người lao động (Loại I - V).
-          </p>
-        </div>
-      </div>
-
       {/* Search & Filter Bar */}
       <div className="bg-white rounded-2xl p-3.5 sm:p-5 shadow-xs border border-slate-200 space-y-3">
         {/* Search input with 120fps smooth input */}
