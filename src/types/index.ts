@@ -32,10 +32,12 @@ export interface ICD10Item {
   tt32Detail: string
   occupationalNote?: string
 
-  // Fast Search Pre-indexes
+  // Fast Search Pre-indexes & Match Scoring
   _cleanCode?: string
   _cleanSearch?: string
   _rawCode?: string
+  _matchPercent?: number
+  _score?: number
 }
 
 export type PriorityGroup = 'standard' | 'kv1_island' | 'minority_special'
