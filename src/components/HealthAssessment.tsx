@@ -4,7 +4,7 @@ import { classifyHealth, calculateBMI, getBMIStatus } from '../utils/healthClass
 import { TARGET_DESCRIPTIONS } from '../data/circularData'
 import { ICD10_DATABASE } from '../data/icd10Data'
 import { searchMatches } from '../utils/searchHelper'
-import { Calculator, User, Eye, Activity, Sparkles, HeartPulse, Search, Trash2, Plus, Info, ShieldCheck } from 'lucide-react'
+import { Calculator, User, Eye, Sparkles, HeartPulse, Search, Trash2, Plus, Info, ShieldCheck, ChevronDown, ChevronUp, Activity, Check } from 'lucide-react'
 
 interface HealthAssessmentProps {
   onClassified: (result: AssessmentResult) => void
@@ -49,8 +49,15 @@ export const HealthAssessment: React.FC<HealthAssessmentProps> = ({
   const [diseaseSearch, setDiseaseSearch] = useState('')
   const [showDiseaseSearch, setShowDiseaseSearch] = useState(false)
 
+  // Section Collapse States (default: Target open, Physical open, Specialties open)
+  const [isTargetOpen, setIsTargetOpen] = useState(true)
+  const [isPhysicalOpen, setIsPhysicalOpen] = useState(true)
+  const [isSpecialtyOpen, setIsSpecialtyOpen] = useState(true)
+  const [isDiseasesOpen, setIsDiseasesOpen] = useState(true)
+
   const bmi = calculateBMI(height, weight)
   const bmiStatus = getBMIStatus(bmi)
+  const currentTargetMeta = TARGET_DESCRIPTIONS[target]
 
   // Filter ICD items for inline search
   const searchedDiseases = diseaseSearch.trim()
@@ -61,8 +68,8 @@ export const HealthAssessment: React.FC<HealthAssessmentProps> = ({
       ).slice(0, 5)
     : []
 
-  const handleCalculate = (e: React.FormEvent) => {
-    e.preventDefault()
+  const handleCalculate = (e?: React.FormEvent) => {
+    if (e) e.preventDefault()
 
     const input: AssessmentInput = {
       target,
@@ -93,65 +100,97 @@ export const HealthAssessment: React.FC<HealthAssessmentProps> = ({
   }
 
   return (
-    <form onSubmit={handleCalculate} className="space-y-6 max-w-4xl mx-auto">
-      {/* Target Selector Card */}
-      <div className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-sm space-y-4">
-        <div className="flex items-center space-x-2 text-sky-600 font-bold text-sm uppercase tracking-wider">
-          <ShieldCheck className="w-4 h-4" />
-          <span>Bước 1: Chọn Đối Tượng Khám & Căn Cứ Áp Dụng</span>
+    <form onSubmit={handleCalculate} className="space-y-3.5 sm:space-y-5 max-w-4xl mx-auto pb-20 sm:pb-0">
+      {/* 1. Target Selector Card (Collapsible) */}
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+        <div
+          onClick={() => setIsTargetOpen(!isTargetOpen)}
+          className="p-4 cursor-pointer flex items-center justify-between hover:bg-slate-50/70 select-none"
+        >
+          <div className="flex items-center space-x-2">
+            <div className="w-8 h-8 rounded-lg bg-sky-50 text-sky-600 flex items-center justify-center font-bold text-xs shrink-0">
+              1
+            </div>
+            <div>
+              <div className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center space-x-1.5">
+                <ShieldCheck className="w-4 h-4 text-sky-600" />
+                <span>Đối Tượng Khám & Căn Cứ Áp Dụng</span>
+              </div>
+              <p className="text-[11px] text-slate-500 font-medium">
+                Đang chọn: <strong className="text-sky-700">{currentTargetMeta.title}</strong>
+              </p>
+            </div>
+          </div>
+          <div className="text-slate-400 pl-2">
+            {isTargetOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {(Object.keys(TARGET_DESCRIPTIONS) as ExamTarget[]).map((key) => {
-            const item = TARGET_DESCRIPTIONS[key]
-            const isSelected = target === key
-            return (
-              <div
-                key={key}
-                onClick={() => setTarget(key)}
-                className={`cursor-pointer rounded-xl p-3.5 border transition-all text-left flex flex-col justify-between ${
-                  isSelected
-                    ? 'border-sky-500 bg-sky-50/50 ring-2 ring-sky-500/20 shadow-sm'
-                    : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50'
-                }`}
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-1.5">
-                    <span className="font-bold text-sm text-slate-900">{item.title}</span>
-                    <span
-                      className={`text-[10px] px-1.5 py-0.5 rounded font-semibold ${
-                        isSelected ? 'bg-sky-600 text-white' : 'bg-slate-100 text-slate-600'
-                      }`}
-                    >
-                      {item.badge}
-                    </span>
+        {isTargetOpen && (
+          <div className="p-4 pt-0 border-t border-slate-100">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 mt-3">
+              {(Object.keys(TARGET_DESCRIPTIONS) as ExamTarget[]).map((key) => {
+                const item = TARGET_DESCRIPTIONS[key]
+                const isSelected = target === key
+                return (
+                  <div
+                    key={key}
+                    onClick={() => setTarget(key)}
+                    className={`cursor-pointer rounded-xl p-3 border transition-all text-left flex flex-col justify-between ${
+                      isSelected
+                        ? 'border-sky-500 bg-sky-50/60 ring-2 ring-sky-500/20 shadow-xs'
+                        : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50'
+                    }`}
+                  >
+                    <div>
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="font-bold text-xs sm:text-sm text-slate-900">{item.title}</span>
+                        <span
+                          className={`text-[10px] px-1.5 py-0.5 rounded font-semibold ${
+                            isSelected ? 'bg-sky-600 text-white' : 'bg-slate-100 text-slate-600'
+                          }`}
+                        >
+                          {item.badge}
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-slate-500 leading-snug line-clamp-2">{item.desc}</p>
+                    </div>
+                    <div className="mt-2 pt-1.5 border-t border-slate-100 text-[10px] font-medium text-slate-600 flex items-center">
+                      <Info className="w-3 h-3 mr-1 text-sky-500 shrink-0" />
+                      <span className="truncate">{item.circular}</span>
+                    </div>
                   </div>
-                  <p className="text-xs text-slate-500 leading-snug line-clamp-2">{item.desc}</p>
-                </div>
-                <div className="mt-2 pt-2 border-t border-slate-100 text-[11px] font-medium text-slate-600 flex items-center">
-                  <Info className="w-3 h-3 mr-1 text-sky-500 shrink-0" />
-                  <span className="truncate">{item.circular}</span>
-                </div>
-              </div>
-            )
-          })}
-        </div>
+                )
+              })}
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* Physical Section */}
-      <div className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-sm space-y-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2 text-sky-600 font-bold text-sm uppercase tracking-wider">
-            <User className="w-4 h-4" />
-            <span>Bước 2: Chỉ Số Thể Lực</span>
+      {/* 2. Physical Section (Collapsible) */}
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+        <div
+          onClick={() => setIsPhysicalOpen(!isPhysicalOpen)}
+          className="p-4 cursor-pointer flex items-center justify-between hover:bg-slate-50/70 select-none"
+        >
+          <div className="flex items-center space-x-2">
+            <div className="w-8 h-8 rounded-lg bg-sky-50 text-sky-600 flex items-center justify-center font-bold text-xs shrink-0">
+              2
+            </div>
+            <div>
+              <div className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center space-x-1.5">
+                <User className="w-4 h-4 text-sky-600" />
+                <span>Chỉ Số Thể Lực (BMI, Chiều cao, Cân nặng)</span>
+              </div>
+              <p className="text-[11px] text-slate-500 font-medium">
+                {gender === 'male' ? 'Nam' : 'Nữ'} • {height}cm • {weight}kg • BMI: <strong className="text-slate-800">{bmi}</strong> ({bmiStatus})
+              </p>
+            </div>
           </div>
 
-          {/* Realtime BMI badge */}
-          <div className="flex items-center space-x-2 px-3 py-1 bg-slate-100 rounded-lg text-xs">
-            <span className="text-slate-500">BMI:</span>
-            <strong className="text-slate-900 font-mono text-sm">{bmi}</strong>
+          <div className="flex items-center space-x-2">
             <span
-              className={`px-1.5 py-0.5 rounded text-[11px] font-semibold ${
+              className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
                 bmi >= 18.5 && bmi < 23
                   ? 'bg-emerald-100 text-emerald-800'
                   : bmi < 18.5
@@ -159,395 +198,483 @@ export const HealthAssessment: React.FC<HealthAssessmentProps> = ({
                   : 'bg-rose-100 text-rose-800'
               }`}
             >
-              {bmiStatus}
+              BMI {bmi}
             </span>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-          <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">Giới tính</label>
-            <div className="grid grid-cols-2 gap-2">
-              <button
-                type="button"
-                onClick={() => setGender('male')}
-                className={`py-2 rounded-lg text-xs font-bold transition-all ${
-                  gender === 'male' ? 'bg-sky-600 text-white shadow-sm' : 'bg-slate-100 text-slate-700'
-                }`}
-              >
-                Nam
-              </button>
-              <button
-                type="button"
-                onClick={() => setGender('female')}
-                className={`py-2 rounded-lg text-xs font-bold transition-all ${
-                  gender === 'female' ? 'bg-pink-600 text-white shadow-sm' : 'bg-slate-100 text-slate-700'
-                }`}
-              >
-                Nữ
-              </button>
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">Chiều cao (cm)</label>
-            <input
-              type="number"
-              min={130}
-              max={220}
-              value={height}
-              onChange={(e) => setHeight(Number(e.target.value))}
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm font-semibold text-slate-800 focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 outline-none"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">Cân nặng (kg)</label>
-            <input
-              type="number"
-              min={30}
-              max={160}
-              value={weight}
-              onChange={(e) => setWeight(Number(e.target.value))}
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm font-semibold text-slate-800 focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 outline-none"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">Vòng ngực (cm)</label>
-            <input
-              type="number"
-              min={60}
-              max={140}
-              value={chest}
-              onChange={(e) => setChest(Number(e.target.value))}
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm font-semibold text-slate-800 focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 outline-none"
-            />
-          </div>
-        </div>
-
-        {target === 'tuyen-sinh-quan-su' && (
-          <div className="pt-2 border-t border-slate-100">
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
-              Khu vực / Đối tượng ưu tiên tuyển sinh quân sự:
-            </label>
-            <select
-              value={priorityGroup}
-              onChange={(e) => setPriorityGroup(e.target.value as PriorityGroup)}
-              className="w-full sm:w-auto px-3 py-1.5 border border-slate-300 rounded-lg text-xs font-medium text-slate-800 focus:border-sky-500 outline-none"
-            >
-              <option value="standard">Đối tượng thông thường (Nam ≥ 165cm, Nữ ≥ 154cm)</option>
-              <option value="kv1_island">Khu vực 1, hải đảo, dân tộc thiểu số (Nam ≥ 160cm, Nữ ≥ 152cm)</option>
-              <option value="minority_special">16 dân tộc thiểu số rất ít người (Nam ≥ 158cm, nặng ≥ 46kg)</option>
-            </select>
-          </div>
-        )}
-      </div>
-
-      {/* Specialty Checks: Eye, Heart, ENT, Dental */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Mắt & Khúc xạ */}
-        <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-3">
-          <div className="flex items-center space-x-2 text-sky-600 font-bold text-xs uppercase tracking-wider">
-            <Eye className="w-4 h-4" />
-            <span>Mắt & Khúc xạ</span>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3 text-xs">
-            <div>
-              <label className="block font-semibold text-slate-700 mb-1">Mắt phải (thị lực/10)</label>
-              <select
-                value={rightEyeVision}
-                onChange={(e) => setRightEyeVision(Number(e.target.value))}
-                className="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg font-medium"
-              >
-                {[10, 9, 8, 7, 6, 5, 4, 3, 2, 1].map((v) => (
-                  <option key={v} value={v}>
-                    {v}/10
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="block font-semibold text-slate-700 mb-1">Mắt trái (thị lực/10)</label>
-              <select
-                value={leftEyeVision}
-                onChange={(e) => setLeftEyeVision(Number(e.target.value))}
-                className="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg font-medium"
-              >
-                {[10, 9, 8, 7, 6, 5, 4, 3, 2, 1].map((v) => (
-                  <option key={v} value={v}>
-                    {v}/10
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="block font-semibold text-slate-700 mb-1">Độ Cận thị (Đi-ốp)</label>
-              <input
-                type="number"
-                step="0.25"
-                min="0"
-                max="15"
-                value={myopiaDiopters}
-                onChange={(e) => setMyopiaDiopters(Number(e.target.value))}
-                className="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg font-medium"
-                placeholder="0 nếu không cận"
-              />
-            </div>
-
-            <div>
-              <label className="block font-semibold text-slate-700 mb-1">Độ Loạn thị (Đi-ốp)</label>
-              <input
-                type="number"
-                step="0.25"
-                min="0"
-                max="10"
-                value={astigmatismDiopters}
-                onChange={(e) => setAstigmatismDiopters(Number(e.target.value))}
-                className="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg font-medium"
-                placeholder="0 nếu không loạn"
-              />
-            </div>
-          </div>
-          {myopiaDiopters > 0 && myopiaDiopters <= 3.0 && (
-            <p className="text-[11px] text-amber-700 bg-amber-50 p-2 rounded-lg leading-tight">
-              * Lưu ý: Cận thị dưới 3.0D chỉ được xét tuyển vào các trường Kỹ thuật quân đội (HVKTQS, HVQY...) nếu thị lực chỉnh kính đạt 10/10.
-            </p>
-          )}
-        </div>
-
-        {/* Huyết áp & Tim mạch */}
-        <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-3">
-          <div className="flex items-center space-x-2 text-sky-600 font-bold text-xs uppercase tracking-wider">
-            <HeartPulse className="w-4 h-4" />
-            <span>Huyết Áp & Tuần Hoàn</span>
-          </div>
-
-          <div className="grid grid-cols-3 gap-2 text-xs">
-            <div>
-              <label className="block font-semibold text-slate-700 mb-1">Tâm thu (mmHg)</label>
-              <input
-                type="number"
-                min={70}
-                max={240}
-                value={systolicBP}
-                onChange={(e) => setSystolicBP(Number(e.target.value))}
-                className="w-full px-2 py-1.5 border border-slate-300 rounded-lg font-medium text-center"
-              />
-            </div>
-
-            <div>
-              <label className="block font-semibold text-slate-700 mb-1">Tâm trương (mmHg)</label>
-              <input
-                type="number"
-                min={40}
-                max={150}
-                value={diastolicBP}
-                onChange={(e) => setDiastolicBP(Number(e.target.value))}
-                className="w-full px-2 py-1.5 border border-slate-300 rounded-lg font-medium text-center"
-              />
-            </div>
-
-            <div>
-              <label className="block font-semibold text-slate-700 mb-1">Nhịp tim (ck/phút)</label>
-              <input
-                type="number"
-                min={40}
-                max={180}
-                value={pulse}
-                onChange={(e) => setPulse(Number(e.target.value))}
-                className="w-full px-2 py-1.5 border border-slate-300 rounded-lg font-medium text-center"
-              />
-            </div>
-          </div>
-          <p className="text-[11px] text-slate-500">
-            Huyết áp chuẩn: 110-129 / 70-84 mmHg. Huyết áp &gt;= 140/90 mmHg là Tăng huyết áp.
-          </p>
-        </div>
-
-        {/* Răng Hàm Mặt */}
-        <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-3">
-          <div className="flex items-center space-x-2 text-sky-600 font-bold text-xs uppercase tracking-wider">
-            <Activity className="w-4 h-4" />
-            <span>Răng Hàm Mặt</span>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3 text-xs">
-            <div>
-              <label className="block font-semibold text-slate-700 mb-1">Số răng sâu chưa hàn</label>
-              <select
-                value={cavitiesCount}
-                onChange={(e) => setCavitiesCount(Number(e.target.value))}
-                className="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg font-medium"
-              >
-                <option value={0}>Không có (0 răng)</option>
-                <option value={1}>1 răng sâu độ 1-2</option>
-                <option value={2}>2 răng sâu</option>
-                <option value={3}>3-4 răng sâu</option>
-                <option value={5}>Từ 5 răng trở lên</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block font-semibold text-slate-700 mb-1">Số răng đã mất</label>
-              <select
-                value={lostTeethCount}
-                onChange={(e) => setLostTeethCount(Number(e.target.value))}
-                className="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg font-medium"
-              >
-                <option value={0}>Đầy đủ (0 răng)</option>
-                <option value={1}>Mất 1 răng</option>
-                <option value={2}>Mất 2-3 răng</option>
-                <option value={4}>Mất &gt;= 4 răng</option>
-              </select>
+            <div className="text-slate-400">
+              {isPhysicalOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
             </div>
           </div>
         </div>
 
-        {/* Tai Mũi Họng */}
-        <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-3">
-          <div className="flex items-center space-x-2 text-sky-600 font-bold text-xs uppercase tracking-wider">
-            <Activity className="w-4 h-4" />
-            <span>Tai Mũi Họng</span>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3 text-xs">
-            <div>
-              <label className="block font-semibold text-slate-700 mb-1">Sức nghe (Nói thầm)</label>
-              <select
-                value={hearing}
-                onChange={(e) => setHearing(e.target.value as any)}
-                className="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg font-medium"
-              >
-                <option value="normal">Bình thường (5m)</option>
-                <option value="whisper_3_5m">Giảm nhẹ (3 - 4.5m)</option>
-                <option value="whisper_under_3m">Giảm rõ (&lt; 3m)</option>
-                <option value="deaf">Điếc nặng</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block font-semibold text-slate-700 mb-1">Bệnh TMH mạn tính</label>
-              <select
-                value={chronicENT}
-                onChange={(e) => setChronicENT(e.target.value as any)}
-                className="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg font-medium"
-              >
-                <option value="none">Không có</option>
-                <option value="allergic_rhinitis">Viêm mũi dị ứng nhẹ</option>
-                <option value="sinusitis">Viêm xoang mạn tính</option>
-                <option value="otitis_media">Viêm tai giữa / thủng nhĩ</option>
-              </select>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Selected Diseases Section from ICD-10 */}
-      <div className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-sm space-y-4">
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <div className="flex items-center space-x-2 text-sky-600 font-bold text-sm uppercase tracking-wider">
-            <Sparkles className="w-4 h-4" />
-            <span>Bước 3: Bệnh Mắc Kèm Theo Mã ICD-10 ({selectedDiseases.length})</span>
-          </div>
-
-          <button
-            type="button"
-            onClick={() => setShowDiseaseSearch(!showDiseaseSearch)}
-            className="flex items-center space-x-1.5 px-3 py-1 bg-sky-50 text-sky-700 hover:bg-sky-100 rounded-lg text-xs font-semibold transition-colors"
-          >
-            <Plus className="w-3.5 h-3.5" />
-            <span>Thêm bệnh lý</span>
-          </button>
-        </div>
-
-        {/* Inline Disease Search Box */}
-        {showDiseaseSearch && (
-          <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
-            <div className="relative">
-              <input
-                type="text"
-                value={diseaseSearch}
-                onChange={(e) => setDiseaseSearch(e.target.value)}
-                placeholder="Gõ mã hoặc tên bệnh cần thêm (VD: B18.1 viêm gan B, E11 đái tháo đường...)"
-                className="w-full pl-9 pr-3 py-2 bg-white border border-slate-300 rounded-lg text-xs outline-none focus:border-sky-500"
-              />
-              <Search className="w-4 h-4 text-slate-400 absolute left-2.5 top-2.5" />
-            </div>
-
-            {searchedDiseases.length > 0 && (
-              <div className="divide-y divide-slate-100 bg-white rounded-lg border border-slate-200 overflow-hidden shadow-sm">
-                {searchedDiseases.map((d) => (
-                  <div
-                    key={d.code}
-                    className="p-2 flex items-center justify-between text-xs hover:bg-sky-50 transition-colors"
+        {isPhysicalOpen && (
+          <div className="p-4 pt-0 border-t border-slate-100 space-y-3.5">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-3">
+              <div>
+                <label className="block text-[11px] font-semibold text-slate-700 mb-1">Giới tính</label>
+                <div className="grid grid-cols-2 gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => setGender('male')}
+                    className={`py-1.5 rounded-lg text-xs font-bold transition-all ${
+                      gender === 'male' ? 'bg-sky-600 text-white shadow-xs' : 'bg-slate-100 text-slate-700'
+                    }`}
                   >
-                    <div>
-                      <strong className="text-sky-700 font-mono mr-2">[{d.code}]</strong>
-                      <span className="font-semibold text-slate-800">{d.nameVi}</span>
-                      <span className="text-[10px] text-slate-400 ml-2">(TT105: Điểm {d.tt105Score})</span>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        onAddDisease(d)
-                        setDiseaseSearch('')
-                      }}
-                      className="px-2 py-1 bg-sky-600 hover:bg-sky-700 text-white rounded text-[11px] font-semibold"
-                    >
-                      Chọn
-                    </button>
-                  </div>
-                ))}
+                    Nam
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setGender('female')}
+                    className={`py-1.5 rounded-lg text-xs font-bold transition-all ${
+                      gender === 'female' ? 'bg-pink-600 text-white shadow-xs' : 'bg-slate-100 text-slate-700'
+                    }`}
+                  >
+                    Nữ
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-semibold text-slate-700 mb-1">Chiều cao (cm)</label>
+                <input
+                  type="number"
+                  min={130}
+                  max={220}
+                  value={height}
+                  onChange={(e) => setHeight(Number(e.target.value))}
+                  className="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs font-bold text-slate-900 focus:border-sky-500 outline-none"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-semibold text-slate-700 mb-1">Cân nặng (kg)</label>
+                <input
+                  type="number"
+                  min={30}
+                  max={160}
+                  value={weight}
+                  onChange={(e) => setWeight(Number(e.target.value))}
+                  className="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs font-bold text-slate-900 focus:border-sky-500 outline-none"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-semibold text-slate-700 mb-1">Vòng ngực (cm)</label>
+                <input
+                  type="number"
+                  min={60}
+                  max={140}
+                  value={chest}
+                  onChange={(e) => setChest(Number(e.target.value))}
+                  className="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs font-bold text-slate-900 focus:border-sky-500 outline-none"
+                />
+              </div>
+            </div>
+
+            {target === 'tuyen-sinh-quan-su' && (
+              <div className="pt-2 border-t border-slate-100">
+                <label className="block text-[11px] font-semibold text-slate-700 mb-1">
+                  Khu vực / Đối tượng tuyển sinh quân sự:
+                </label>
+                <select
+                  value={priorityGroup}
+                  onChange={(e) => setPriorityGroup(e.target.value as PriorityGroup)}
+                  className="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs font-medium text-slate-800 focus:border-sky-500 outline-none bg-slate-50"
+                >
+                  <option value="standard">Đối tượng thông thường (Nam ≥ 165cm, Nữ ≥ 154cm)</option>
+                  <option value="kv1_island">Khu vực 1, hải đảo, dân tộc thiểu số (Nam ≥ 160cm, Nữ ≥ 152cm)</option>
+                  <option value="minority_special">16 dân tộc thiểu số rất ít người (Nam ≥ 158cm, nặng ≥ 46kg)</option>
+                </select>
               </div>
             )}
           </div>
         )}
+      </div>
 
-        {/* Display selected disease tags */}
-        {selectedDiseases.length > 0 ? (
-          <div className="flex flex-wrap gap-2">
-            {selectedDiseases.map((disease) => (
-              <div
-                key={disease.code}
-                className="inline-flex items-center space-x-2 pl-2.5 pr-1.5 py-1 bg-slate-100 border border-slate-200 rounded-lg text-xs"
-              >
-                <span className="font-mono font-bold text-sky-700">[{disease.code}]</span>
-                <span className="font-medium text-slate-800">{disease.nameVi}</span>
-                <span className="text-[10px] px-1 py-0.5 rounded bg-slate-200 text-slate-600 font-semibold">
-                  Điểm {disease.tt105Score}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => onRemoveDisease(disease.code)}
-                  className="p-1 text-slate-400 hover:text-rose-600 rounded"
-                  title="Xóa bệnh này"
-                >
-                  <Trash2 className="w-3.5 h-3.5" />
-                </button>
+      {/* 3. Specialty Checks (Collapsible) */}
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+        <div
+          onClick={() => setIsSpecialtyOpen(!isSpecialtyOpen)}
+          className="p-4 cursor-pointer flex items-center justify-between hover:bg-slate-50/70 select-none"
+        >
+          <div className="flex items-center space-x-2">
+            <div className="w-8 h-8 rounded-lg bg-sky-50 text-sky-600 flex items-center justify-center font-bold text-xs shrink-0">
+              3
+            </div>
+            <div>
+              <div className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center space-x-1.5">
+                <Activity className="w-4 h-4 text-sky-600" />
+                <span>Khám Chuyên Khoa Lâm Sàng</span>
               </div>
-            ))}
+              <p className="text-[11px] text-slate-500 font-medium">
+                Mắt ({rightEyeVision}/{leftEyeVision}) • HA ({systolicBP}/{diastolicBP}) • Tim ({pulse}ck/p)
+              </p>
+            </div>
           </div>
-        ) : (
-          <p className="text-xs text-slate-500 italic">
-            Chưa có bệnh lý mắc kèm nào được chọn. Nếu có chẩn đoán bệnh tật, hãy bấm "Thêm bệnh lý" hoặc chọn từ mục "Tra cứu ICD-10".
-          </p>
+          <div className="text-slate-400 pl-2">
+            {isSpecialtyOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+          </div>
+        </div>
+
+        {isSpecialtyOpen && (
+          <div className="p-4 pt-0 border-t border-slate-100 space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
+              {/* Mắt & Khúc xạ */}
+              <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2.5">
+                <div className="flex items-center justify-between text-xs font-bold text-slate-900">
+                  <span className="flex items-center text-sky-700">
+                    <Eye className="w-3.5 h-3.5 mr-1" />
+                    Mắt & Khúc Xạ
+                  </span>
+                  <span className="text-[10px] text-slate-500">Thang điểm 10</span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 text-xs">
+                  <div>
+                    <label className="block text-[11px] text-slate-600 mb-0.5">Mắt phải</label>
+                    <select
+                      value={rightEyeVision}
+                      onChange={(e) => setRightEyeVision(Number(e.target.value))}
+                      className="w-full px-2 py-1 bg-white border border-slate-300 rounded-md font-semibold text-xs"
+                    >
+                      {[10, 9, 8, 7, 6, 5, 4, 3, 2, 1].map((v) => (
+                        <option key={v} value={v}>
+                          {v}/10
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] text-slate-600 mb-0.5">Mắt trái</label>
+                    <select
+                      value={leftEyeVision}
+                      onChange={(e) => setLeftEyeVision(Number(e.target.value))}
+                      className="w-full px-2 py-1 bg-white border border-slate-300 rounded-md font-semibold text-xs"
+                    >
+                      {[10, 9, 8, 7, 6, 5, 4, 3, 2, 1].map((v) => (
+                        <option key={v} value={v}>
+                          {v}/10
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] text-slate-600 mb-0.5">Độ Cận thị (D)</label>
+                    <input
+                      type="number"
+                      step="0.25"
+                      min="0"
+                      max="15"
+                      value={myopiaDiopters}
+                      onChange={(e) => setMyopiaDiopters(Number(e.target.value))}
+                      className="w-full px-2 py-1 bg-white border border-slate-300 rounded-md font-semibold text-xs"
+                      placeholder="0 = Không cận"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] text-slate-600 mb-0.5">Độ Loạn thị (D)</label>
+                    <input
+                      type="number"
+                      step="0.25"
+                      min="0"
+                      max="10"
+                      value={astigmatismDiopters}
+                      onChange={(e) => setAstigmatismDiopters(Number(e.target.value))}
+                      className="w-full px-2 py-1 bg-white border border-slate-300 rounded-md font-semibold text-xs"
+                      placeholder="0 = Không loạn"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Huyết áp & Tim mạch */}
+              <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2.5">
+                <div className="flex items-center justify-between text-xs font-bold text-slate-900">
+                  <span className="flex items-center text-emerald-700">
+                    <HeartPulse className="w-3.5 h-3.5 mr-1" />
+                    Huyết Áp & Tuần Hoàn
+                  </span>
+                  <span className="text-[10px] text-slate-500">mmHg</span>
+                </div>
+
+                <div className="grid grid-cols-3 gap-2 text-xs">
+                  <div>
+                    <label className="block text-[11px] text-slate-600 mb-0.5">Tâm thu</label>
+                    <input
+                      type="number"
+                      min={70}
+                      max={240}
+                      value={systolicBP}
+                      onChange={(e) => setSystolicBP(Number(e.target.value))}
+                      className="w-full px-1.5 py-1 bg-white border border-slate-300 rounded-md font-semibold text-xs text-center"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] text-slate-600 mb-0.5">Tâm trương</label>
+                    <input
+                      type="number"
+                      min={40}
+                      max={150}
+                      value={diastolicBP}
+                      onChange={(e) => setDiastolicBP(Number(e.target.value))}
+                      className="w-full px-1.5 py-1 bg-white border border-slate-300 rounded-md font-semibold text-xs text-center"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] text-slate-600 mb-0.5">Nhịp tim</label>
+                    <input
+                      type="number"
+                      min={40}
+                      max={180}
+                      value={pulse}
+                      onChange={(e) => setPulse(Number(e.target.value))}
+                      className="w-full px-1.5 py-1 bg-white border border-slate-300 rounded-md font-semibold text-xs text-center"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Răng Hàm Mặt */}
+              <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2.5">
+                <div className="text-xs font-bold text-slate-900 flex items-center text-sky-700">
+                  <Activity className="w-3.5 h-3.5 mr-1" />
+                  Răng Hàm Mặt
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 text-xs">
+                  <div>
+                    <label className="block text-[11px] text-slate-600 mb-0.5">Răng sâu chưa hàn</label>
+                    <select
+                      value={cavitiesCount}
+                      onChange={(e) => setCavitiesCount(Number(e.target.value))}
+                      className="w-full px-2 py-1 bg-white border border-slate-300 rounded-md font-medium text-xs"
+                    >
+                      <option value={0}>0 răng</option>
+                      <option value={1}>1 răng sâu</option>
+                      <option value={2}>2 răng sâu</option>
+                      <option value={3}>3-4 răng</option>
+                      <option value={5}>≥ 5 răng</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] text-slate-600 mb-0.5">Răng đã mất</label>
+                    <select
+                      value={lostTeethCount}
+                      onChange={(e) => setLostTeethCount(Number(e.target.value))}
+                      className="w-full px-2 py-1 bg-white border border-slate-300 rounded-md font-medium text-xs"
+                    >
+                      <option value={0}>0 răng</option>
+                      <option value={1}>1 răng</option>
+                      <option value={2}>2-3 răng</option>
+                      <option value={4}>≥ 4 răng</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              {/* Tai Mũi Họng */}
+              <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2.5">
+                <div className="text-xs font-bold text-slate-900 flex items-center text-sky-700">
+                  <Activity className="w-3.5 h-3.5 mr-1" />
+                  Tai Mũi Họng
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 text-xs">
+                  <div>
+                    <label className="block text-[11px] text-slate-600 mb-0.5">Sức nghe nói thầm</label>
+                    <select
+                      value={hearing}
+                      onChange={(e) => setHearing(e.target.value as any)}
+                      className="w-full px-2 py-1 bg-white border border-slate-300 rounded-md font-medium text-xs"
+                    >
+                      <option value="normal">Bình thường (5m)</option>
+                      <option value="whisper_3_5m">Giảm nhẹ (3-4.5m)</option>
+                      <option value="whisper_under_3m">Giảm rõ (&lt;3m)</option>
+                      <option value="deaf">Điếc nặng</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] text-slate-600 mb-0.5">Bệnh TMH mạn</label>
+                    <select
+                      value={chronicENT}
+                      onChange={(e) => setChronicENT(e.target.value as any)}
+                      className="w-full px-2 py-1 bg-white border border-slate-300 rounded-md font-medium text-xs"
+                    >
+                      <option value="none">Không có</option>
+                      <option value="allergic_rhinitis">Viêm mũi dị ứng</option>
+                      <option value="sinusitis">Viêm xoang mạn</option>
+                      <option value="otitis_media">Viêm tai giữa</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         )}
       </div>
 
-      {/* Submit Button */}
-      <button
-        type="submit"
-        className="w-full py-4 bg-gradient-to-r from-sky-600 via-teal-600 to-emerald-600 hover:from-sky-700 hover:to-emerald-700 text-white font-extrabold text-base rounded-2xl shadow-lg shadow-sky-600/20 flex items-center justify-center space-x-2 transition-all transform active:scale-98 cursor-pointer"
-      >
-        <Calculator className="w-5 h-5" />
-        <span>KẾT LUẬN & XẾP LOẠI SỨC KHỎE NGAY</span>
-      </button>
+      {/* 4. Selected Diseases from ICD-10 (Collapsible) */}
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+        <div
+          onClick={() => setIsDiseasesOpen(!isDiseasesOpen)}
+          className="p-4 cursor-pointer flex items-center justify-between hover:bg-slate-50/70 select-none"
+        >
+          <div className="flex items-center space-x-2">
+            <div className="w-8 h-8 rounded-lg bg-sky-50 text-sky-600 flex items-center justify-center font-bold text-xs shrink-0">
+              4
+            </div>
+            <div>
+              <div className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center space-x-1.5">
+                <Sparkles className="w-4 h-4 text-sky-600" />
+                <span>Bệnh Lý Kèm Theo ({selectedDiseases.length})</span>
+              </div>
+              <p className="text-[11px] text-slate-500 font-medium">
+                {selectedDiseases.length === 0
+                  ? 'Chưa chọn bệnh lý nào (bấm để thêm)'
+                  : `Đã chọn: ${selectedDiseases.map((d) => d.code).join(', ')}`}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation()
+                setIsDiseasesOpen(true)
+                setShowDiseaseSearch(!showDiseaseSearch)
+              }}
+              className="p-1 px-2 bg-sky-50 text-sky-700 hover:bg-sky-100 rounded-lg text-xs font-semibold flex items-center space-x-1"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Thêm</span>
+            </button>
+            <div className="text-slate-400">
+              {isDiseasesOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+            </div>
+          </div>
+        </div>
+
+        {isDiseasesOpen && (
+          <div className="p-4 pt-0 border-t border-slate-100 space-y-3">
+            {/* Inline search bar */}
+            {showDiseaseSearch && (
+              <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2 mt-3">
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={diseaseSearch}
+                    onChange={(e) => setDiseaseSearch(e.target.value)}
+                    placeholder="Gõ mã hoặc tên bệnh (VD: B18.1, E11, tăng huyết áp...)"
+                    className="w-full pl-8 pr-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs outline-none focus:border-sky-500 font-medium"
+                  />
+                  <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" />
+                </div>
+
+                {searchedDiseases.length > 0 && (
+                  <div className="divide-y divide-slate-100 bg-white rounded-lg border border-slate-200 shadow-xs overflow-hidden">
+                    {searchedDiseases.map((d) => (
+                      <div
+                        key={d.code}
+                        className="p-2 flex items-center justify-between text-xs hover:bg-sky-50 transition-colors"
+                      >
+                        <div className="min-w-0 pr-2">
+                          <strong className="text-sky-700 font-mono mr-1.5">[{d.code}]</strong>
+                          <span className="font-semibold text-slate-800">{d.nameVi}</span>
+                          <span className="text-[10px] text-slate-400 ml-1.5">
+                            (Điểm {d.tt105Score})
+                          </span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            onAddDisease(d)
+                            setDiseaseSearch('')
+                          }}
+                          className="px-2 py-1 bg-sky-600 hover:bg-sky-700 text-white rounded text-[10px] font-bold shrink-0"
+                        >
+                          Chọn
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Selected disease tags */}
+            {selectedDiseases.length > 0 ? (
+              <div className="flex flex-wrap gap-2 mt-3">
+                {selectedDiseases.map((disease) => (
+                  <div
+                    key={disease.code}
+                    className="inline-flex items-center space-x-1.5 pl-2.5 pr-1 py-1 bg-slate-100 border border-slate-200 rounded-lg text-xs"
+                  >
+                    <span className="font-mono font-bold text-sky-700">[{disease.code}]</span>
+                    <span className="font-medium text-slate-800 truncate max-w-[180px] sm:max-w-none">
+                      {disease.nameVi}
+                    </span>
+                    <span className="text-[10px] px-1 py-0.5 rounded bg-slate-200 text-slate-600 font-bold">
+                      Điểm {disease.tt105Score}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => onRemoveDisease(disease.code)}
+                      className="p-1 text-slate-400 hover:text-rose-600 rounded"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-xs text-slate-400 italic mt-3">
+                Chưa có bệnh lý nào được chọn. Hãy bấm "Thêm" hoặc tìm kiếm ở tab "Mã ICD-10".
+              </p>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Primary Action Button (Desktop) */}
+      <div className="hidden sm:block">
+        <button
+          type="submit"
+          className="w-full py-4 bg-gradient-to-r from-sky-600 via-teal-600 to-emerald-600 hover:from-sky-700 hover:to-emerald-700 text-white font-extrabold text-base rounded-2xl shadow-lg shadow-sky-600/20 flex items-center justify-center space-x-2 transition-all transform active:scale-98 cursor-pointer"
+        >
+          <Calculator className="w-5 h-5" />
+          <span>KẾT LUẬN & XẾP LOẠI SỨC KHỎE NGAY</span>
+        </button>
+      </div>
+
+      {/* Mobile Sticky Bottom Action Bar */}
+      <div className="fixed sm:hidden bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur border-t border-slate-200 p-2.5 px-4 flex items-center justify-between shadow-2xl">
+        <div className="min-w-0 pr-2">
+          <div className="text-[10px] text-slate-400 truncate uppercase font-bold">
+            {currentTargetMeta.title}
+          </div>
+          <div className="text-xs font-black text-slate-900">
+            BMI {bmi} • {gender === 'male' ? 'Nam' : 'Nữ'}
+          </div>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => handleCalculate()}
+          className="py-2.5 px-4 bg-gradient-to-r from-sky-600 to-emerald-600 text-white font-black text-xs rounded-xl shadow-md flex items-center space-x-1.5 shrink-0 active:scale-95"
+        >
+          <Check className="w-4 h-4" />
+          <span>XẾP LOẠI NGAY</span>
+        </button>
+      </div>
     </form>
   )
 }
