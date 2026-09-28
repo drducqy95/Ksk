@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { CIRCULARS } from '../data/circularData'
-import { BookOpen, CheckCircle2, Shield, HeartPulse, Scale, ChevronDown, ChevronUp, Layers } from 'lucide-react'
+import { BookOpen, CheckCircle2, Shield, HeartPulse, ChevronDown, ChevronUp, Layers } from 'lucide-react'
 
 export const CircularViewer: React.FC = () => {
   const [selectedId, setSelectedId] = useState<string>('vbhn88-2025-bqp')
@@ -29,21 +29,7 @@ export const CircularViewer: React.FC = () => {
   }
 
   return (
-    <div className="space-y-4 sm:space-y-6 max-w-5xl mx-auto">
-      {/* Banner */}
-      <div className="bg-gradient-to-r from-slate-900 via-teal-950 to-slate-900 rounded-2xl p-5 sm:p-7 text-white border border-teal-800/40 shadow-xl">
-        <div className="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full bg-teal-500/20 text-teal-300 text-[11px] font-semibold mb-2.5 border border-teal-500/30">
-          <Scale className="w-3.5 h-3.5" />
-          <span>Hệ Thống Văn Bản Pháp Quy Y Tế & Quân Sự Hiện Hành</span>
-        </div>
-        <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight mb-1.5">
-          Căn Cứ Pháp Lý & Toàn Văn Tiêu Chuẩn Sức Khỏe
-        </h1>
-        <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-3xl">
-          Nội dung đầy đủ của Văn bản hợp nhất 88/VBHN-BQP (18/11/2025), Thông tư 32/2023/TT-BYT, Thông tư 28/2016/TT-BYT và Thông tư 37/2021/TT-BQP.
-        </p>
-      </div>
-
+    <div className="space-y-4 sm:space-y-5 max-w-5xl mx-auto">
       {/* Circular Tabs (Horizontal Scrollable on mobile) */}
       <div className="flex overflow-x-auto p-1.5 bg-slate-200/90 rounded-2xl border border-slate-300 space-x-1.5 scrollbar-none">
         {CIRCULARS.map((c) => {

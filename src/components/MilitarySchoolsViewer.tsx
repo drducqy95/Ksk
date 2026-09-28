@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { MILITARY_SCHOOLS } from '../data/militarySchools'
-import { ShieldCheck, Eye, Ruler, Weight, Search, CheckCircle2 } from 'lucide-react'
+import { Eye, Ruler, Weight, Search, CheckCircle2 } from 'lucide-react'
 
 export const MilitarySchoolsViewer: React.FC = () => {
   const [filter, setFilter] = useState<'ALL' | 'technical' | 'command'>('ALL')
@@ -20,21 +20,7 @@ export const MilitarySchoolsViewer: React.FC = () => {
   })
 
   return (
-    <div className="space-y-6 max-w-5xl mx-auto">
-      {/* Banner */}
-      <div className="bg-gradient-to-r from-slate-900 via-sky-950 to-slate-900 rounded-2xl p-6 sm:p-8 text-white border border-sky-800/40 shadow-xl">
-        <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-semibold mb-3 border border-emerald-500/30">
-          <ShieldCheck className="w-3.5 h-3.5" />
-          <span>Quy chế Tuyển sinh Quân sự & Thông tư 105/2023/TT-BQP</span>
-        </div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight mb-2">
-          Tiêu Chuẩn Sức Khỏe Các Học Viện & Trường Sĩ Quan Quân Đội
-        </h1>
-        <p className="text-sm text-slate-300 leading-relaxed max-w-3xl">
-          Tra cứu tiêu chuẩn chiều cao, cân nặng và điều kiện thị lực (cho phép cận thị hay không) đối với từng trường đào tạo sĩ quan chỉ huy, chính trị và kỹ thuật quân sự.
-        </p>
-      </div>
-
+    <div className="space-y-4 max-w-5xl mx-auto">
       {/* Controls */}
       <div className="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-sm flex flex-col sm:flex-row gap-3 items-center justify-between">
         <div className="relative w-full sm:w-80">
