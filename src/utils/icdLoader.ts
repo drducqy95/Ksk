@@ -11,7 +11,9 @@ export async function getFullICD10(): Promise<ICD10Item[]> {
 
   loadingPromise = (async () => {
     try {
-      const res = await fetch('/data/icd10_full.json')
+      const basePath = import.meta.env.BASE_URL || '/'
+      const jsonUrl = `${basePath.endsWith('/') ? basePath : basePath + '/'}data/icd10_full.json`
+      const res = await fetch(jsonUrl)
       if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`)
       const json: ICD10Item[] = await res.json()
 
