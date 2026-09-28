@@ -119,7 +119,7 @@ export function App() {
               <span>Hệ Thống KSK PRO - Tra cứu ICD-10 & Xếp loại Sức khỏe PWA</span>
             </div>
             <p>
-              Căn cứ: <strong>Thông tư 105/2023/TT-BQP</strong> (Bộ Quốc phòng) & <strong>Thông tư 32/2023/TT-BYT</strong> (Bộ Y tế).
+              Căn cứ: <strong>Văn bản hợp nhất 88/VBHN-BQP</strong> (18/11/2025 - Hợp nhất TT 105 & TT 106) & <strong>Thông tư 32/2023/TT-BYT</strong>.
             </p>
           </div>
 

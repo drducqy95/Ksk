@@ -117,7 +117,7 @@ ${result.recommendations.length > 0 ? result.recommendations.map((r) => `- ${r}`
               <div className="flex items-center justify-between mb-3">
                 <span className="flex items-center text-xs font-bold text-slate-700 uppercase tracking-wider">
                   <ShieldCheck className="w-4 h-4 mr-1.5 text-sky-600" />
-                  Theo TT 105/2023/TT-BQP
+                  Theo VBHN 88/VBHN-BQP (TT 105/2023)
                 </span>
                 <span className={`px-3 py-1 rounded-full text-xs font-black uppercase ${tt105Color}`}>
                   Loại {result.overallTT105.score}

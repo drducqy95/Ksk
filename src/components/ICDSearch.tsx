@@ -64,7 +64,7 @@ export const ICDSearch: React.FC<ICDSearchProps> = ({
         <div className="relative z-10 max-w-3xl">
           <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-sky-500/20 text-sky-300 text-xs font-semibold mb-3 border border-sky-500/30">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Tra cứu Thông tư 105/2023/TT-BQP & Thông tư 32/2023/TT-BYT</span>
+            <span>Căn cứ VBHN 88/VBHN-BQP (18/11/2025) & Thông tư 32/2023/TT-BYT</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight mb-2">
             Tra Cứu Bệnh & Mã ICD-10
@@ -164,7 +164,7 @@ export const ICDSearch: React.FC<ICDSearchProps> = ({
       {/* Results Header */}
       <div className="flex items-center justify-between text-xs text-slate-500 px-1">
         <span>Tìm thấy <strong className="text-slate-800 font-bold">{filteredItems.length}</strong> mã bệnh phù hợp</span>
-        <span>Cập nhật Thông tư 105/2023/TT-BQP & TT 32/2023/TT-BYT</span>
+        <span>Cập nhật VBHN 88/VBHN-BQP (18/11/2025) & TT 32/2023/TT-BYT</span>
       </div>
 
       {/* Disease Cards Grid */}

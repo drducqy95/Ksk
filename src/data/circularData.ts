@@ -16,32 +16,37 @@ export interface CircularInfo {
 
 export const CIRCULARS: CircularInfo[] = [
   {
-    id: 'tt105-2023-bqp',
-    code: 'Thông tư 105/2023/TT-BQP',
-    name: 'Quy định tiêu chuẩn sức khỏe, khám sức khỏe cho các đối tượng thuộc phạm vi quản lý của Bộ Quốc phòng',
-    issueDate: '06/12/2023',
-    effectiveDate: '01/01/2024',
-    authority: 'Bộ trưởng Bộ Quốc phòng',
-    replaces: 'Thông tư liên tịch số 16/2016/TTLT-BYT-BQP',
+    id: 'vbhn88-2025-bqp',
+    code: 'Văn bản hợp nhất 88/VBHN-BQP',
+    name: 'Văn bản hợp nhất Thông tư quy định tiêu chuẩn sức khỏe, khám sức khỏe cho các đối tượng thuộc phạm vi quản lý của Bộ Quốc phòng (Hợp nhất TT 105/2023/TT-BQP & TT 106/2025/TT-BQP)',
+    issueDate: '18/11/2025',
+    effectiveDate: '18/11/2025',
+    authority: 'Bộ Quốc phòng',
+    replaces: 'Hợp nhất Thông tư 105/2023/TT-BQP (ngày 06/12/2023) và Thông tư 106/2025/TT-BQP (ngày 30/09/2025)',
     scope: [
       'Khám sức khỏe thực hiện nghĩa vụ quân sự',
       'Tuyển sinh quân sự (đào tạo sĩ quan, hạ sĩ quan chỉ huy, chuyên môn kỹ thuật)',
-      'Khám sức khỏe định kỳ cho quân nhân (sĩ quan, QNCN, hạ sĩ quan, binh sĩ)',
-      'Tuyển dụng vào quân đội'
+      'Khám sức khỏe định kỳ cho quân nhân (sĩ quan, QNCN, hạ sĩ quan, binh sĩ tại ngũ)',
+      'Quản lý và kiểm tra sức khỏe quân nhân dự bị',
+      'Khám sức khỏe tuyển dụng vào đội ngũ cán bộ, đào tạo sĩ quan dự bị, tuyển dụng quân nhân chuyên nghiệp, công nhân và viên chức quốc phòng'
     ],
-    gradingSystem: 'Thang điểm 1 - 6 cho từng chuyên khoa. Xếp loại sức khỏe chung từ Loại 1 đến Loại 6 (lấy theo chỉ tiêu có điểm số cao nhất).',
+    gradingSystem: 'Thang điểm 1 - 6 cho từng chuyên khoa. Xếp loại sức khỏe chung từ Loại 1 đến Loại 6 (lấy theo chỉ tiêu có điểm số cao nhất). Quân nhân định kỳ theo dõi xếp loại sức khỏe để phân công công tác hoặc chuyển viện điều trị.',
     keyProvisions: [
       {
-        title: 'Chỉ tiêu phân loại sức khỏe chung',
+        title: 'Chỉ tiêu phân loại sức khỏe chung (Điều 5 & Điều 6)',
         content: 'Loại 1: Tất cả các chỉ tiêu đạt điểm 1 (Rất tốt);\nLoại 2: Có ít nhất một chỉ tiêu bị điểm 2 (Tốt);\nLoại 3: Có ít nhất một chỉ tiêu bị điểm 3 (Khá);\nLoại 4: Có ít nhất một chỉ tiêu bị điểm 4 (Trung bình);\nLoại 5: Có ít nhất một chỉ tiêu bị điểm 5 (Kém);\nLoại 6: Có ít nhất một chỉ tiêu bị điểm 6 (Rất kém).'
       },
       {
+        title: 'Quy định về Khám sức khỏe định kỳ quân nhân',
+        content: '- Quân nhân tại ngũ (sĩ quan, QNCN, hạ sĩ quan, binh sĩ) được khám sức khỏe định kỳ hàng năm nhằm đánh giá thể lực, phát hiện bệnh tật sớm và phân loại sức khỏe.\n- Căn cứ bảng phân loại sức khỏe tại VBHN 88/VBHN-BQP kết hợp quy trình quản lý, chăm sóc sức khỏe quân nhân (Thông tư số 37/2021/TT-BQP).\n- Quân nhân có sức khỏe Loại 1, Loại 2, Loại 3, Loại 4 được bố trí công tác phù hợp; quân nhân Loại 5, Loại 6 được điều trị tích cực hoặc xem xét giải quyết chế độ chính sách.'
+      },
+      {
         title: 'Tiêu chuẩn thể lực chung (Bảng 1 Phụ lục 1)',
-        content: 'Nam:\n- Loại 1: Cao >= 163cm, Cân nặng >= 51kg, Vòng ngực >= 81cm, BMI 18.5 - 24.9\n- Loại 2: Cao 160 - 162cm, Cân nặng 47 - 50kg, Vòng ngực 78 - 80cm\n- Loại 3: Cao 157 - 159cm, Cân nặng 43 - 46kg, Vòng ngực 75 - 77cm\n- Dưới 157cm hoặc dưới 43kg: Điểm 4 - 6.\nNữ:\n- Loại 1: Cao >= 154cm, Cân nặng >= 48kg, BMI 18.5 - 24.9\n- Loại 2: Cao 152 - 153cm, Cân nặng 44 - 47kg\n- Loại 3: Cao 150 - 151cm, Cân nặng 42 - 43kg\n- Dưới 150cm hoặc dưới 42kg: Điểm 4 - 6.'
+        content: 'Nam:\n- Loại 1: Cao ≥ 163cm, Cân nặng ≥ 51kg, Vòng ngực ≥ 81cm, BMI 18.5 - 24.9\n- Loại 2: Cao 160 - 162cm, Cân nặng 47 - 50kg, Vòng ngực 78 - 80cm\n- Loại 3: Cao 157 - 159cm, Cân nặng 43 - 46kg, Vòng ngực 75 - 77cm\n- Dưới 157cm hoặc dưới 43kg: Điểm 4 - 6.\nNữ:\n- Loại 1: Cao ≥ 154cm, Cân nặng ≥ 48kg, BMI 18.5 - 24.9\n- Loại 2: Cao 152 - 153cm, Cân nặng 44 - 47kg\n- Loại 3: Cao 150 - 151cm, Cân nặng 42 - 43kg\n- Dưới 150cm hoặc dưới 42kg: Điểm 4 - 6.'
       },
       {
         title: 'Tiêu chuẩn riêng Tuyển sinh quân sự',
-        content: '- Thể lực chung: Nam cao >= 1.65m, nặng >= 50kg; Nữ cao >= 1.54m, nặng >= 48kg.\n- Thí sinh KV1, hải đảo, dân tộc thiểu số: Nam cao >= 1.60m, nặng >= 48kg; Nữ cao >= 1.52m, nặng >= 46kg.\n- Dân tộc rất ít người (<10.000 người): Nam cao >= 1.58m, nặng >= 46kg.\n- Trường Sĩ quan chỉ huy, chính trị: Không tuyển thí sinh cận thị.\n- Trường Kỹ thuật (HVKTQS, HVQY, Hệ Kỹ thuật PK-KQ, Hải quân...): Tuyển thí sinh cận không quá 3.0D, thị lực sau chỉnh kính đạt 10/10, tổng thị lực 2 mắt >= 19/10.'
+        content: '- Thể lực chung: Nam cao ≥ 1.65m, nặng ≥ 50kg; Nữ cao ≥ 1.54m, nặng ≥ 48kg.\n- Thí sinh KV1, hải đảo, dân tộc thiểu số: Nam cao ≥ 1.60m, nặng ≥ 48kg; Nữ cao ≥ 1.52m, nặng ≥ 46kg.\n- Dân tộc rất ít người (<10.000 người): Nam cao ≥ 1.58m, nặng ≥ 46kg.\n- Trường Sĩ quan chỉ huy, chính trị: Không tuyển thí sinh cận thị.\n- Trường Kỹ thuật (HVKTQS, HVQY, Hệ Kỹ thuật PK-KQ, Hải quân...): Tuyển thí sinh cận không quá 3.0D, thị lực sau chỉnh kính đạt 10/10, tổng thị lực 2 mắt ≥ 19/10.'
       }
     ]
   },
@@ -76,14 +81,14 @@ export const CIRCULARS: CircularInfo[] = [
 export const TARGET_DESCRIPTIONS: Record<string, { title: string; circular: string; desc: string; badge: string }> = {
   'tuyen-sinh-quan-su': {
     title: 'Tuyển sinh quân sự',
-    circular: 'Thông tư 105/2023/TT-BQP & Quy chế Ban TSQS BQP',
+    circular: 'Văn bản hợp nhất 88/VBHN-BQP (18/11/2025) & Quy chế Ban TSQS BQP',
     desc: 'Xét tuyển vào các học viện, trường sĩ quan quân đội. Yêu cầu sức khỏe Loại 1 hoặc Loại 2; có tiêu chuẩn thị lực và thể lực đặc thù theo từng khối trường.',
     badge: 'Bộ Quốc phòng'
   },
   'dinh-ky-quan-nhan': {
     title: 'Khám sức khỏe định kỳ quân nhân',
-    circular: 'Thông tư 105/2023/TT-BQP',
-    desc: 'Đánh giá phân loại sức khỏe hàng năm cho sĩ quan, quân nhân chuyên nghiệp, công nhân quốc phòng để duy trì sẵn sàng chiến đấu.',
+    circular: 'Văn bản hợp nhất 88/VBHN-BQP (18/11/2025) & TT 37/2021/TT-BQP',
+    desc: 'Đánh giá phân loại sức khỏe định kỳ hàng năm cho sĩ quan, quân nhân chuyên nghiệp, hạ sĩ quan, binh sĩ theo tiêu chuẩn VBHN 88/VBHN-BQP để duy trì sẵn sàng chiến đấu.',
     badge: 'Quân đội'
   },
   'xin-viec-lam': {
