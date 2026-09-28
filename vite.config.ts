@@ -4,7 +4,7 @@ import tailwindcss from '@tailwindcss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
-  base: process.env.BASE_URL || (process.env.NODE_ENV === 'production' ? '/Ksk/' : '/'),
+  base: process.env.BASE_URL || '/',
   plugins: [
     react(),
     tailwindcss(),
