@@ -35,6 +35,7 @@ export interface ICD10Item {
   // Fast Search Pre-indexes
   _cleanCode?: string
   _cleanSearch?: string
+  _rawCode?: string
 }
 
 export type PriorityGroup = 'standard' | 'kv1_island' | 'minority_special'

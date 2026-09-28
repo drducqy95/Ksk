@@ -17,11 +17,14 @@ export async function getFullICD10(): Promise<ICD10Item[]> {
       if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`)
       const json: ICD10Item[] = await res.json()
 
+      // Filter out any header rows from excel export
+      const validJson = json.filter((item) => item.code && item.code !== 'MÃ')
+
       // Map verified clinical items to override generic ones
       const customMap = new Map<string, ICD10Item>()
       ICD10_DATABASE.forEach((item) => customMap.set(item.code, item))
 
-      const merged: ICD10Item[] = json.map((item) => {
+      const merged: ICD10Item[] = validJson.map((item) => {
         if (customMap.has(item.code)) {
           return customMap.get(item.code)!
         }
@@ -38,10 +41,12 @@ export async function getFullICD10(): Promise<ICD10Item[]> {
       // Pre-index all items for instant O(1) searches
       const indexed = merged.map((item) => {
         const cleanCode = item.code.toLowerCase()
-        const cleanSearch = `${cleanCode} ${removeVietnameseTones(`${item.nameVi} ${item.nameEn || ''}`)}`
+        const rawCode = item.code.replace(/[^a-zA-Z0-9]/g, '').toLowerCase()
+        const cleanSearch = `${cleanCode} ${rawCode} ${removeVietnameseTones(`${item.nameVi} ${item.nameEn || ''}`)}`
         return {
           ...item,
           _cleanCode: cleanCode,
+          _rawCode: rawCode,
           _cleanSearch: cleanSearch
         }
       })
