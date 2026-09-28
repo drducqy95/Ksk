@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import type { AssessmentInput, AssessmentResult, ExamTarget, ICD10Item, PriorityGroup } from '../types'
 import { classifyHealth, calculateBMI, getBMIStatus } from '../utils/healthClassifier'
 import { TARGET_DESCRIPTIONS } from '../data/circularData'
 import { ICD10_DATABASE } from '../data/icd10Data'
+import { getFullICD10 } from '../utils/icdLoader'
 import { searchMatches } from '../utils/searchHelper'
 import { Calculator, User, Eye, Sparkles, HeartPulse, Search, Trash2, Plus, Info, ShieldCheck, ChevronDown, ChevronUp, Activity, Check } from 'lucide-react'
 
@@ -48,6 +49,11 @@ export const HealthAssessment: React.FC<HealthAssessmentProps> = ({
   // Search in form
   const [diseaseSearch, setDiseaseSearch] = useState('')
   const [showDiseaseSearch, setShowDiseaseSearch] = useState(false)
+  const [allICDList, setAllICDList] = useState<ICD10Item[]>(ICD10_DATABASE)
+
+  useEffect(() => {
+    getFullICD10().then(setAllICDList)
+  }, [])
 
   // Section Collapse States (default: Target open, Physical open, Specialties open)
   const [isTargetOpen, setIsTargetOpen] = useState(true)
@@ -59,13 +65,15 @@ export const HealthAssessment: React.FC<HealthAssessmentProps> = ({
   const bmiStatus = getBMIStatus(bmi)
   const currentTargetMeta = TARGET_DESCRIPTIONS[target]
 
-  // Filter ICD items for inline search
+  // Filter ICD items for inline search across all 13,190 codes
   const searchedDiseases = diseaseSearch.trim()
-    ? ICD10_DATABASE.filter(
-        (d) =>
-          !selectedDiseases.some((sd) => sd.code === d.code) &&
-          (searchMatches(d.code, diseaseSearch) || searchMatches(d.nameVi, diseaseSearch))
-      ).slice(0, 5)
+    ? allICDList
+        .filter(
+          (d) =>
+            !selectedDiseases.some((sd) => sd.code === d.code) &&
+            (searchMatches(d.code, diseaseSearch) || searchMatches(d.nameVi, diseaseSearch))
+        )
+        .slice(0, 8)
     : []
 
   const handleCalculate = (e?: React.FormEvent) => {
