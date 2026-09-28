@@ -1,5 +1,6 @@
 import { ICD10_DATABASE } from '../data/icd10Data'
 import type { ICD10Item } from '../types'
+import { removeVietnameseTones } from './searchHelper'
 
 let fullCache: ICD10Item[] | null = null
 let loadingPromise: Promise<ICD10Item[]> | null = null
@@ -32,8 +33,19 @@ export async function getFullICD10(): Promise<ICD10Item[]> {
         }
       })
 
-      fullCache = merged
-      return merged
+      // Pre-index all items for instant O(1) searches
+      const indexed = merged.map((item) => {
+        const cleanCode = item.code.toLowerCase()
+        const cleanSearch = `${cleanCode} ${removeVietnameseTones(`${item.nameVi} ${item.nameEn || ''}`)}`
+        return {
+          ...item,
+          _cleanCode: cleanCode,
+          _cleanSearch: cleanSearch
+        }
+      })
+
+      fullCache = indexed
+      return indexed
     } catch (err) {
       console.warn('Could not load /data/icd10_full.json, falling back to core dataset:', err)
       fullCache = ICD10_DATABASE

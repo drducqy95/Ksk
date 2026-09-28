@@ -76,39 +76,40 @@ export function App() {
         handleInstallClick={handleInstallClick}
       />
 
-      {/* Main Body */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-        {/* Quick Target Tabs bar if on classifier */}
-        {activeTab === 'icd10' && (
-          <ICDSearch
-            onSelectForAssessment={(item) => {
-              handleAddDisease(item)
-            }}
-            selectedItems={selectedDiseases}
-          />
-        )}
+      {/* Main Body with Smooth Transitions */}
+      <main className="flex-1 max-w-7xl w-full mx-auto px-3.5 sm:px-6 lg:px-8 py-4 sm:py-7">
+        <div key={activeTab} className="tab-transition">
+          {activeTab === 'icd10' && (
+            <ICDSearch
+              onSelectForAssessment={(item) => {
+                handleAddDisease(item)
+              }}
+              selectedItems={selectedDiseases}
+            />
+          )}
 
-        {activeTab === 'classifier' && (
-          <div>
-            {assessmentResult ? (
-              <AssessmentResultView
-                result={assessmentResult}
-                onReevaluate={() => setAssessmentResult(null)}
-              />
-            ) : (
-              <HealthAssessment
-                onClassified={handleClassified}
-                selectedDiseases={selectedDiseases}
-                onRemoveDisease={handleRemoveDisease}
-                onAddDisease={handleAddDisease}
-              />
-            )}
-          </div>
-        )}
+          {activeTab === 'classifier' && (
+            <div>
+              {assessmentResult ? (
+                <AssessmentResultView
+                  result={assessmentResult}
+                  onReevaluate={() => setAssessmentResult(null)}
+                />
+              ) : (
+                <HealthAssessment
+                  onClassified={handleClassified}
+                  selectedDiseases={selectedDiseases}
+                  onRemoveDisease={handleRemoveDisease}
+                  onAddDisease={handleAddDisease}
+                />
+              )}
+            </div>
+          )}
 
-        {activeTab === 'schools' && <MilitarySchoolsViewer />}
+          {activeTab === 'schools' && <MilitarySchoolsViewer />}
 
-        {activeTab === 'circulars' && <CircularViewer />}
+          {activeTab === 'circulars' && <CircularViewer />}
+        </div>
       </main>
 
       {/* Footer */}
